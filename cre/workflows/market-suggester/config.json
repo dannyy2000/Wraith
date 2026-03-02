@@ -7,7 +7,7 @@
   "marketDeadlineDays": 14,
   "evms": [
     {
-      "marketFactoryAddress": "DEPLOY_ADDRESS_HERE",
+      "marketFactoryAddress": "0x35067ef1c48207F633030BcB2c682f84e8918ec2",
       "chainSelectorName": "ethereum-testnet-sepolia-arbitrum-1",
       "gasLimit": "2000000"
     }
