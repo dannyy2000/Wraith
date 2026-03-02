@@ -7,17 +7,37 @@
     color-scheme: dark;
   }
 
-  body {
-    @apply bg-black text-zinc-100 antialiased;
+  html {
+    background-color: #080810;
   }
 
-  * {
-    @apply border-zinc-800;
+  body {
+    @apply antialiased;
+    background-color: #080810;
+    color: #e8e8f0;
+    background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(139,92,246,0.1) 0%, transparent 60%);
+    background-attachment: fixed;
   }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: #080810; }
+  ::-webkit-scrollbar-thumb { background: #2a2a40; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #3d3d5c; }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .text-gradient-purple {
+    background: linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glow-purple {
+    box-shadow: 0 0 24px rgba(139,92,246,0.3);
   }
 }

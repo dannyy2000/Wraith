@@ -9,21 +9,21 @@ interface BadgeProps {
 }
 
 const colorClasses: Record<Color, string> = {
-  green:  'bg-green-500/15 text-green-400 ring-1 ring-green-500/30',
-  yellow: 'bg-yellow-500/15 text-yellow-400 ring-1 ring-yellow-500/30',
-  orange: 'bg-orange-500/15 text-orange-400 ring-1 ring-orange-500/30',
-  red:    'bg-red-500/15 text-red-400 ring-1 ring-red-500/30',
-  purple: 'bg-purple-500/15 text-purple-400 ring-1 ring-purple-500/30',
-  blue:   'bg-blue-500/15 text-blue-400 ring-1 ring-blue-500/30',
-  zinc:   'bg-zinc-500/15 text-zinc-400 ring-1 ring-zinc-500/30',
-  cyan:   'bg-cyan-500/15 text-cyan-400 ring-1 ring-cyan-500/30',
+  green:  'bg-emerald-500/10 text-emerald-400 ring-1 ring-emerald-500/25',
+  yellow: 'bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/25',
+  orange: 'bg-orange-500/10 text-orange-400 ring-1 ring-orange-500/25',
+  red:    'bg-red-500/10 text-red-400 ring-1 ring-red-500/25',
+  purple: 'bg-violet-500/10 text-violet-400 ring-1 ring-violet-500/25',
+  blue:   'bg-blue-500/10 text-blue-400 ring-1 ring-blue-500/25',
+  zinc:   'bg-zinc-500/10 text-zinc-400 ring-1 ring-zinc-500/20',
+  cyan:   'bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/25',
 }
 
 export function Badge({ label, color = 'zinc', className }: BadgeProps) {
   return (
     <span
       className={clsx(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium tracking-wide',
         colorClasses[color],
         className
       )}

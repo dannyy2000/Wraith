@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.variable} font-sans min-h-screen bg-black`}>
+      <body className={`${inter.variable} font-sans min-h-screen`}>
         <Web3Provider>
           <Navbar />
           <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">

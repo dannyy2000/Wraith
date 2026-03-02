@@ -32,11 +32,16 @@ export function MarketFilters() {
         <button
           key={f.value}
           onClick={() => setFilter(f.value)}
-          className={clsx(
-            'px-3 py-1.5 rounded-full text-xs font-medium transition-colors',
+          style={
             current === f.value
-              ? 'bg-wraith-purple text-white'
-              : 'bg-zinc-800 text-zinc-400 hover:text-white hover:bg-zinc-700'
+              ? { background: 'linear-gradient(135deg, #8B5CF6, #6D28D9)', color: 'white' }
+              : {}
+          }
+          className={clsx(
+            'px-3.5 py-1.5 rounded-full text-xs font-medium transition-all',
+            current === f.value
+              ? 'shadow-glow-purple'
+              : 'text-zinc-500 hover:text-zinc-200 border border-white/8 hover:border-white/15'
           )}
         >
           {f.label}
