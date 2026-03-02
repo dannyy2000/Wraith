@@ -65,7 +65,6 @@ contract MarketFactory {
     error DisputeWindowOpen();
     error DisputeWindowClosed();
     error NotForwarder();
-    error AlreadyChallenged();
     error MarketNotDisputed();
     error MarketNotPendingResolution();
     error InvalidOutcome();
@@ -144,9 +143,9 @@ contract MarketFactory {
         Market storage m = _requireMarket(marketId);
         if (m.status != MarketStatus.PENDING_RESOLUTION) revert MarketNotPendingResolution();
         if (block.timestamp > m.disputeDeadline) revert DisputeWindowClosed();
-        if (m.challenger != address(0)) revert AlreadyChallenged();
         if (msg.value < m.creatorBond) revert InsufficientBond();
 
+        // Once challenged the market becomes DISPUTED — further challenges revert at the status check above
         m.challenger = msg.sender;
         m.challengerBond = msg.value;
         m.status = MarketStatus.DISPUTED;
