@@ -1,0 +1,19 @@
+# Foundry
+contracts/out/
+contracts/cache/
+contracts/.env
+
+# CRE
+cre/node_modules/
+cre/.env
+cre/dist/
+
+# Frontend
+frontend/node_modules/
+frontend/.env
+frontend/.env.local
+frontend/.next/
+
+# General
+.DS_Store
+*.log
