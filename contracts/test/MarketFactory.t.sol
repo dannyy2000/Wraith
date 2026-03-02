@@ -312,32 +312,17 @@ contract MarketFactoryTest is Test {
     }
 
     // ================================================================
-    // │                  onReport — 0x00 create                     │
+    // │            onReport — unknown prefix (no-op)                │
     // ================================================================
 
-    function test_onReport_createMarketFromCRE() public {
-        bytes memory report = abi.encodePacked(
-            bytes1(0x00),
-            abi.encode(
-                "Will BTC hit $100k?",
-                uint8(ResolutionType.PRICE_FEED),
-                "0xBTCFeed",
-                "",
-                "",
-                ">= 100000",
-                "",
-                block.timestamp + 7 days
-            )
-        );
-
+    function test_onReport_unknownPrefixDoesNothing() public {
+        // 0x00 was the old CRE create-market route — removed.
+        // Markets are now created directly by creators via createMarket().
+        // Unknown prefixes should be silently ignored (no revert).
+        bytes memory report = abi.encodePacked(bytes1(0x00), abi.encode("ignored"));
         vm.prank(forwarder);
-        factory.onReport("", report);
-
-        assertEq(factory.getMarketCount(), 1);
-        Market memory m = factory.getMarket(0);
-        assertEq(m.creator, address(factory));
-        assertEq(m.question, "Will BTC hit $100k?");
-        assertEq(uint(m.config.resolutionType), uint(ResolutionType.PRICE_FEED));
+        factory.onReport("", report); // should not revert
+        assertEq(factory.getMarketCount(), 0); // nothing created
     }
 
     // ================================================================

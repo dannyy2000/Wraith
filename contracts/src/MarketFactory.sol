@@ -195,9 +195,12 @@ contract MarketFactory {
     /// @notice Called by the Chainlink CRE Forwarder to post settlement results.
     ///
     /// Report byte prefix routing:
-    ///   0x00 → create market from AI suggestion (Reddit + Claude pipeline)
     ///   0x01 → settle market (PRICE_FEED / API_POLL / AI_VERDICT)
     ///   0x02 → settle disputed OPTIMISTIC market after AI_VERDICT
+    ///
+    /// Note: market creation is NOT done via CRE. The market-suggester workflow
+    /// returns a suggestion to the frontend; the creator reviews it and calls
+    /// createMarket() directly, staking their own bond.
     function onReport(bytes calldata /* metadata */, bytes calldata rawReport) external {
         if (msg.sender != forwarder) revert NotForwarder();
         _processReport(rawReport);
@@ -207,58 +210,11 @@ contract MarketFactory {
         uint8 prefix = uint8(report[0]);
         bytes calldata payload = report[1:];
 
-        if (prefix == 0x00) {
-            _createMarketFromCRE(payload);
-        } else if (prefix == 0x01) {
+        if (prefix == 0x01) {
             _settleMarket(payload);
         } else if (prefix == 0x02) {
             _settleDispute(payload);
         }
-    }
-
-    /// @dev Creates a market from a Claude-generated suggestion posted by CRE.
-    function _createMarketFromCRE(bytes calldata payload) internal {
-        (
-            string memory question,
-            uint8 resType,
-            string memory source,
-            string memory endpoint,
-            string memory field,
-            string memory condition,
-            string memory resolutionPrompt,
-            uint256 deadline
-        ) = abi.decode(payload, (string, uint8, string, string, string, string, string, uint256));
-
-        uint256 marketId = _nextMarketId++;
-
-        _markets[marketId] = Market({
-            id: marketId,
-            creator: address(this),
-            question: question,
-            config: ResolutionConfig({
-                resolutionType: ResolutionType(resType),
-                source: source,
-                endpoint: endpoint,
-                field: field,
-                condition: condition,
-                resolutionPrompt: resolutionPrompt,
-                deadline: deadline
-            }),
-            status: MarketStatus.OPEN,
-            outcome: Outcome.UNRESOLVED,
-            reasoning: "",
-            createdAt: block.timestamp,
-            settledAt: 0,
-            creatorBond: 0,
-            challenger: address(0),
-            challengerBond: 0,
-            disputeDeadline: 0,
-            proposedOutcome: Outcome.UNRESOLVED
-        });
-
-        _allMarketIds.push(marketId);
-
-        emit MarketCreated(marketId, address(this), ResolutionType(resType), question, deadline);
     }
 
     /// @dev Settles a PRICE_FEED, API_POLL, or AI_VERDICT market.
