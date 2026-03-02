@@ -218,20 +218,52 @@ npm run deploy:workflows
 ```bash
 cd frontend
 npm install
+cp .env.local.example .env.local
+# fill in .env.local with deployed contract addresses and your WalletConnect project ID
 npm run dev
 ```
+
+**Environment variables** (`.env.local`):
+
+| Variable | Description |
+|---|---|
+| `NEXT_PUBLIC_FACTORY_ADDRESS` | Deployed `MarketFactory` address |
+| `NEXT_PUBLIC_POOL_ADDRESS` | Deployed `PrivacyPool` address |
+| `NEXT_PUBLIC_REGISTRY_ADDRESS` | Deployed `ClaimRegistry` address |
+| `NEXT_PUBLIC_CRE_SUGGESTER_URL` | Chainlink CRE `market-suggester` HTTP endpoint |
+| `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnect cloud project ID |
+
+**Bet privacy model**: When you place a bet, a secret and nullifier are generated client-side and stored only in your browser's `localStorage`. The on-chain commitment is a hash — your position is never revealed. To claim winnings, you reveal the secret + nullifier. Crucially, the claim can be submitted from any wallet, breaking the link between your betting wallet and your claiming wallet.
+
+---
+
+## WraithKeeper — Chainlink Automation
+
+`WraithKeeper.sol` is a Chainlink Automation-compatible keeper that automatically triggers settlement for expired markets.
+
+```
+Chainlink Automation → checkUpkeep() every block
+  → finds first OPEN, non-OPTIMISTIC market past deadline
+  → calls performUpkeep(marketId)
+  → calls factory.requestSettlement(marketId)
+  → emits SettlementRequested
+  → CRE log trigger fires → runs settlement workflow
+```
+
+After deployment, register the keeper at [automation.chain.link](https://automation.chain.link) with the `WraithKeeper` address as the upkeep contract.
 
 ---
 
 ## Status
 
-Active development. Built for the Chainlink hackathon.
+Built for the Chainlink hackathon.
 
 | Component | Status |
 |---|---|
-| Contracts | In progress |
-| CRE Workflows | In progress |
-| Frontend | In progress |
+| Contracts | Complete — 77 tests passing |
+| CRE Workflows | Complete — market-suggester + settlement |
+| WraithKeeper | Complete — Chainlink Automation integration |
+| Frontend | Complete — Next.js 14, RainbowKit, wagmi |
 
 ---
 
