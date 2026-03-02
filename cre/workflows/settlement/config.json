@@ -1,0 +1,10 @@
+{
+  "claudeModel": "claude-sonnet-4-6",
+  "evms": [
+    {
+      "marketFactoryAddress": "DEPLOY_ADDRESS_HERE",
+      "chainSelectorName": "arbitrum-testnet-sepolia",
+      "gasLimit": "3000000"
+    }
+  ]
+}
