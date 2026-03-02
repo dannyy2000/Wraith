@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { useAccount } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { Button } from '@/components/ui/Button'
+import { ChainGuard } from '@/components/ui/ChainGuard'
 import { usePlaceBet } from '@/hooks/usePlaceBet'
 import { Outcome } from '@/lib/types'
 import { clsx } from 'clsx'
@@ -55,6 +56,7 @@ export function BetForm({ marketId, question }: BetFormProps) {
   }
 
   return (
+    <ChainGuard>
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* YES / NO toggle */}
       <div className="grid grid-cols-2 gap-2">
@@ -110,5 +112,6 @@ export function BetForm({ marketId, question }: BetFormProps) {
         Your commitment is private. Claim from any wallet.
       </p>
     </form>
+    </ChainGuard>
   )
 }
