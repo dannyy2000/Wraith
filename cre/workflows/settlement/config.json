@@ -3,7 +3,7 @@
   "evms": [
     {
       "marketFactoryAddress": "DEPLOY_ADDRESS_HERE",
-      "chainSelectorName": "arbitrum-testnet-sepolia",
+      "chainSelectorName": "ethereum-testnet-sepolia-arbitrum-1",
       "gasLimit": "3000000"
     }
   ]
