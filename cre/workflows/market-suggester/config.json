@@ -1,0 +1,15 @@
+{
+  "claudeModel": "claude-sonnet-4-6",
+  "reddit": {
+    "subreddit": "CryptoCurrency",
+    "postLimit": 10
+  },
+  "marketDeadlineDays": 14,
+  "evms": [
+    {
+      "marketFactoryAddress": "DEPLOY_ADDRESS_HERE",
+      "chainSelectorName": "arbitrum-testnet-sepolia",
+      "gasLimit": "2000000"
+    }
+  ]
+}
