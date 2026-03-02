@@ -28,7 +28,7 @@ import {
 // ================================================================
 
 type Config = {
-  claudeModel: string;
+  openaiModel: string;
   reddit: {
     subreddit: string;
     postLimit: number;
@@ -69,8 +69,8 @@ export interface MarketSuggestion {
   redditSource: string;      // the subreddit post title that inspired this
 }
 
-interface ClaudeResponse {
-  content: Array<{ type: string; text: string }>;
+interface OpenAIResponse {
+  choices: Array<{ message: { content: string } }>;
 }
 
 // ================================================================
@@ -152,7 +152,7 @@ function generateSuggestion(
   posts: RedditPost[]
 ): Omit<MarketSuggestion, "deadlineTimestamp"> {
   const httpClient = new cre.capabilities.HTTPClient();
-  const apiKey = runtime.getSecret({ id: "ANTHROPIC_API_KEY" }).result();
+  const apiKey = runtime.getSecret({ id: "OPENAI_API_KEY" }).result();
 
   const postsText = posts
     .map((p, i) => `${i + 1}. "${p.title}" (${p.score} upvotes, ${p.num_comments} comments)`)
@@ -169,39 +169,40 @@ function generateSuggestion(
       ): Omit<MarketSuggestion, "deadlineTimestamp"> => {
         const body = new TextEncoder().encode(
           JSON.stringify({
-            model: config.claudeModel,
+            model: config.openaiModel,
             max_tokens: 1024,
-            system: SYSTEM_PROMPT,
-            messages: [{ role: "user", content: userMessage }],
+            messages: [
+              { role: "system", content: SYSTEM_PROMPT },
+              { role: "user", content: userMessage },
+            ],
           })
         );
 
         const resp = sendRequester
           .sendRequest({
-            url: "https://api.anthropic.com/v1/messages",
+            url: "https://api.openai.com/v1/chat/completions",
             method: "POST",
             body: Buffer.from(body).toString("base64"),
             headers: {
               "content-type": "application/json",
-              "x-api-key": apiKey.value,
-              "anthropic-version": "2023-06-01",
+              "authorization": `Bearer ${apiKey.value}`,
             },
           })
           .result();
 
         if (!ok(resp)) {
           const errBody = new TextDecoder().decode(resp.body);
-          throw new Error(`Claude API error: ${resp.statusCode} - ${errBody}`);
+          throw new Error(`OpenAI API error: ${resp.statusCode} - ${errBody}`);
         }
 
         const responseText = new TextDecoder().decode(resp.body);
-        const claudeResponse = JSON.parse(responseText) as ClaudeResponse;
-        const text = claudeResponse.content[0]?.text;
+        const openaiResponse = JSON.parse(responseText) as OpenAIResponse;
+        const text = openaiResponse.choices[0]?.message?.content;
 
-        if (!text) throw new Error("Claude returned empty response");
+        if (!text) throw new Error("OpenAI returned empty response");
 
         const jsonMatch = text.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) throw new Error(`No JSON in Claude response: ${text}`);
+        if (!jsonMatch) throw new Error(`No JSON in OpenAI response: ${text}`);
 
         return JSON.parse(jsonMatch[0]) as Omit<MarketSuggestion, "deadlineTimestamp">;
       },
@@ -224,8 +225,8 @@ export function onHttpTrigger(runtime: Runtime<Config>, _payload: HTTPPayload): 
   const posts = fetchRedditTrends(runtime);
   runtime.log(`[Step 1] Fetched ${posts.length} trending posts`);
 
-  // Step 2: Ask Claude to generate a market question
-  runtime.log("[Step 2] Asking Claude to generate market suggestion...");
+  // Step 2: Ask OpenAI to generate a market question
+  runtime.log("[Step 2] Asking OpenAI to generate market suggestion...");
   const raw = generateSuggestion(runtime, posts);
   runtime.log(`[Step 2] Question: "${raw.question}"`);
   runtime.log(`[Step 2] Resolution type: ${raw.resolutionType}`);

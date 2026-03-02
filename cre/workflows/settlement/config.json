@@ -1,5 +1,5 @@
 {
-  "claudeModel": "claude-sonnet-4-6",
+  "openaiModel": "gpt-4o-mini",
   "evms": [
     {
       "marketFactoryAddress": "DEPLOY_ADDRESS_HERE",

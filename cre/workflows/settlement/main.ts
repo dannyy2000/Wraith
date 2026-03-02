@@ -40,14 +40,14 @@ import {
   toHex,
   zeroAddress,
 } from "viem";
-import { getAiVerdict } from "./claude.js";
+import { getAiVerdict } from "./openai.js";
 
 // ================================================================
 // │                           Types                              │
 // ================================================================
 
 type Config = {
-  claudeModel: string;
+  openaiModel: string;
   evms: Array<{
     marketFactoryAddress: string;
     chainSelectorName: string;
@@ -385,7 +385,7 @@ function settleAiVerdict(
   source: string,
   reportPrefix: "0x01" | "0x02"
 ): string {
-  runtime.log("[AI_VERDICT] Running Claude verdict...");
+  runtime.log("[AI_VERDICT] Running OpenAI verdict...");
 
   const sources = source.split(",").map((s) => s.trim()).filter(Boolean);
   const verdict = getAiVerdict(runtime, question, resolutionPrompt, sources);
@@ -466,7 +466,7 @@ export function onDisputeEscalated(runtime: Runtime<Config>, log: EVMLog): strin
   const market = readMarket(runtime, marketId);
   runtime.log(`[Step 1] Question: "${market.question}"`);
 
-  // Disputed OPTIMISTIC markets escalate to AI_VERDICT
+  // Disputed OPTIMISTIC markets escalate to AI_VERDICT via OpenAI
   // Use the market question as the resolution prompt if none is stored
   const resolutionPrompt =
     market.config.resolutionPrompt ||

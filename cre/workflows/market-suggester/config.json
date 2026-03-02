@@ -1,5 +1,5 @@
 {
-  "claudeModel": "claude-sonnet-4-6",
+  "openaiModel": "gpt-4o-mini",
   "reddit": {
     "subreddit": "CryptoCurrency",
     "postLimit": 10
