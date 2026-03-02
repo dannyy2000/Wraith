@@ -46,6 +46,8 @@ contract MarketFactory {
     );
     event OutcomeProposed(uint256 indexed marketId, address indexed proposer, Outcome outcome);
     event MarketChallenged(uint256 indexed marketId, address indexed challenger, uint256 bond);
+    /// @dev CRE listens for this event via Log Trigger to execute automated settlement.
+    event SettlementRequested(uint256 indexed marketId);
     /// @dev CRE listens for this event via Log Trigger to run AI_VERDICT on the dispute.
     event DisputeEscalated(uint256 indexed marketId);
     event MarketSettled(uint256 indexed marketId, Outcome outcome, string reasoning);
@@ -169,6 +171,21 @@ contract MarketFactory {
 
         (bool ok,) = m.creator.call{value: bond}("");
         require(ok);
+    }
+
+    // ================================================================
+    // │                   Request Settlement                         │
+    // ================================================================
+
+    /// @notice Anyone can call this after a market's deadline to trigger CRE settlement.
+    ///         Emits SettlementRequested which a CRE Log Trigger listens for.
+    ///         Not applicable to OPTIMISTIC markets — those use proposeOutcome().
+    function requestSettlement(uint256 marketId) external {
+        Market storage m = _requireMarket(marketId);
+        if (m.status != MarketStatus.OPEN) revert MarketAlreadySettled();
+        if (block.timestamp < m.config.deadline) revert DeadlineNotReached();
+        if (m.config.resolutionType == ResolutionType.OPTIMISTIC) revert NotOptimisticMarket();
+        emit SettlementRequested(marketId);
     }
 
     // ================================================================

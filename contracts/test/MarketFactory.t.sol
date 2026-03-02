@@ -414,6 +414,59 @@ contract MarketFactoryTest is Test {
     }
 
     // ================================================================
+    // │                   requestSettlement                          │
+    // ================================================================
+
+    function test_requestSettlement_emitsEvent() public {
+        uint256 id = _createPriceFeedMarket();
+        vm.warp(factory.getMarket(id).config.deadline + 1);
+
+        vm.expectEmit(true, false, false, false);
+        emit MarketFactory.SettlementRequested(id);
+        factory.requestSettlement(id);
+    }
+
+    function test_requestSettlement_anyoneCanCall() public {
+        uint256 id = _createPriceFeedMarket();
+        vm.warp(factory.getMarket(id).config.deadline + 1);
+
+        vm.prank(anyone);
+        factory.requestSettlement(id); // should not revert
+    }
+
+    function test_requestSettlement_revertDeadlineNotReached() public {
+        uint256 id = _createPriceFeedMarket();
+
+        vm.expectRevert(MarketFactory.DeadlineNotReached.selector);
+        factory.requestSettlement(id);
+    }
+
+    function test_requestSettlement_revertIfOptimistic() public {
+        uint256 id = _createOptimisticMarket();
+        vm.warp(factory.getMarket(id).config.deadline + 1);
+
+        vm.expectRevert(MarketFactory.NotOptimisticMarket.selector);
+        factory.requestSettlement(id);
+    }
+
+    function test_requestSettlement_revertIfAlreadySettled() public {
+        uint256 id = _createPriceFeedMarket();
+        vm.warp(factory.getMarket(id).config.deadline + 1);
+        factory.requestSettlement(id);
+
+        // Settle it
+        bytes memory report = abi.encodePacked(
+            bytes1(0x01),
+            abi.encode(id, uint8(Outcome.YES), "settled")
+        );
+        vm.prank(forwarder);
+        factory.onReport("", report);
+
+        vm.expectRevert(MarketFactory.MarketAlreadySettled.selector);
+        factory.requestSettlement(id);
+    }
+
+    // ================================================================
     // │                         Helpers                              │
     // ================================================================
 
