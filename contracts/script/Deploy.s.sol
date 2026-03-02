@@ -6,6 +6,7 @@ import "forge-std/console.sol";
 import "../src/MarketFactory.sol";
 import "../src/PrivacyPool.sol";
 import "../src/ClaimRegistry.sol";
+import "../src/WraithKeeper.sol";
 
 /// @notice Deploys the full Wraith protocol and wires contracts together.
 ///
@@ -47,6 +48,10 @@ contract DeployWraith is Script {
         pool.setClaimRegistry(address(claimRegistry));
         console.log("PrivacyPool wired to ClaimRegistry");
 
+        // 5. WraithKeeper — Chainlink Automation keeper for settlement triggers
+        WraithKeeper keeper = new WraithKeeper(address(factory));
+        console.log("WraithKeeper deployed:  ", address(keeper));
+
         vm.stopBroadcast();
 
         console.log("---");
@@ -56,5 +61,8 @@ contract DeployWraith is Script {
         console.log("MARKET_FACTORY_ADDRESS=", address(factory));
         console.log("PRIVACY_POOL_ADDRESS=  ", address(pool));
         console.log("CLAIM_REGISTRY_ADDRESS=", address(claimRegistry));
+        console.log("WRAITH_KEEPER_ADDRESS= ", address(keeper));
+        console.log("");
+        console.log("Register WRAITH_KEEPER_ADDRESS at automation.chain.link");
     }
 }
