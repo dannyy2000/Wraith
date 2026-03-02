@@ -1,0 +1,19 @@
+{
+  "name": "wraith-cre-workflows",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy:market-suggester": "cre deploy --workflow-path workflows/market-suggester --target staging-settings",
+    "deploy:settlement": "cre deploy --workflow-path workflows/settlement --target staging-settings",
+    "deploy:all": "npm run deploy:market-suggester && npm run deploy:settlement"
+  },
+  "dependencies": {
+    "@chainlink/cre-sdk": "latest",
+    "viem": "^2.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0"
+  }
+}
