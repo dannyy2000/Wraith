@@ -17,7 +17,7 @@ export function SuggestionPanel({
       <div>
         <h2 className="text-sm font-semibold text-zinc-300">AI Suggestions</h2>
         <p className="text-xs text-zinc-500 mt-0.5">
-          Powered by Reddit trends + Claude
+          Powered by Reddit trends + OpenAI
         </p>
       </div>
 

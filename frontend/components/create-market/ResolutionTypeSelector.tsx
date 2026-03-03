@@ -18,7 +18,7 @@ const TYPES = [
     type: ResolutionType.AI_VERDICT,
     label: 'AI Verdict',
     icon: '🤖',
-    desc: 'Claude reads news sources and gives a YES/NO verdict',
+    desc: 'OpenAI reads news sources and gives a YES/NO verdict',
   },
   {
     type: ResolutionType.OPTIMISTIC,
