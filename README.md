@@ -2,7 +2,7 @@
 
 Wraith is an on-chain prediction market protocol with end-to-end position privacy.
 
-Market questions are generated from trending social signals by OpenAI. Resolution logic is locked at deployment and executed autonomously by Chainlink CRE workflows — reading price feeds, polling APIs, or invoking AI verdict — with no manual intervention at settlement. Bets are submitted as on-chain commitments; amounts, directions, and identities remain private until a winner chooses to claim.
+A CRE workflow scrapes Reddit for trending topics and passes them to OpenAI, which generates structured prediction market questions. Resolution logic is locked at deployment and executed autonomously by Chainlink CRE workflows — reading price feeds, polling APIs, or invoking AI verdict — with no manual intervention at settlement. Bets are submitted as on-chain commitments; amounts, directions, and identities remain private until a winner chooses to claim.
 
 ---
 
