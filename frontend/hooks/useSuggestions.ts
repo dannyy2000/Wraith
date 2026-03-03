@@ -20,7 +20,7 @@ export function useSuggestions() {
     setSuggestions([])
 
     try {
-      // Fire 3 requests in parallel — each triggers a fresh Reddit fetch + Claude call,
+      // Fire 3 requests in parallel — each triggers a fresh Reddit fetch + OpenAI call,
       // so the suggestions naturally vary. CRE returns one JSON suggestion per call.
       const results = await Promise.allSettled([
         fetch(url, { method: 'POST' }).then((r) => r.json()),

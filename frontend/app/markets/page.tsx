@@ -23,7 +23,7 @@ export default function MarketsPage() {
           <span className="text-gradient-purple">privately.</span>
         </h1>
         <p className="text-zinc-500 text-base max-w-md mx-auto leading-relaxed">
-          Bet anonymously via commitment hashes. Markets resolve automatically through Chainlink CRE and Claude.
+          Bet anonymously via commitment hashes. Markets resolve automatically through Chainlink CRE and OpenAI.
         </p>
         <div className="mt-7">
           <Link

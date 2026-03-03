@@ -2,7 +2,7 @@
 
 Wraith is an on-chain prediction market protocol with end-to-end position privacy.
 
-Market questions are generated from trending social signals by Claude. Resolution logic is locked at deployment and executed autonomously by Chainlink CRE workflows — reading price feeds, polling APIs, or invoking AI verdict — with no manual intervention at settlement. Bets are submitted as on-chain commitments; amounts, directions, and identities remain private until a winner chooses to claim.
+Market questions are generated from trending social signals by OpenAI. Resolution logic is locked at deployment and executed autonomously by Chainlink CRE workflows — reading price feeds, polling APIs, or invoking AI verdict — with no manual intervention at settlement. Bets are submitted as on-chain commitments; amounts, directions, and identities remain private until a winner chooses to claim.
 
 ---
 
@@ -21,7 +21,7 @@ Wraith fixes both.
 
 ### 1. Market Creation (AI-Assisted)
 
-A Chainlink CRE workflow monitors Reddit trending topics and passes them to Claude. Claude generates:
+A Chainlink CRE workflow monitors Reddit trending topics and passes them to OpenAI. OpenAI generates:
 
 - A well-formed prediction question
 - The resolution type (price feed, API poll, AI verdict, or optimistic)
@@ -47,7 +47,7 @@ At deadline, a Chainlink CRE workflow reads the resolution instructions locked a
 |---|---|
 | `PRICE_FEED` | CRE reads a Chainlink price feed. Compares against stored condition. Fully trustless. |
 | `API_POLL` | CRE makes a Confidential HTTP call to a specified API endpoint. Reads a field, checks a condition. |
-| `AI_VERDICT` | CRE fetches articles from specified news sources, sends them + a predetermined prompt to Claude. Claude returns YES/NO + one-sentence reasoning. Result posted on-chain with a 48hr dispute window. |
+| `AI_VERDICT` | CRE fetches articles from specified news sources, sends them + a predetermined prompt to OpenAI. OpenAI returns YES/NO + one-sentence reasoning. Result posted on-chain with a 48hr dispute window. |
 | `OPTIMISTIC` | Market creator submits YES/NO. 48hr challenge window. Anyone can stake a counter-bond to dispute. Disputed markets escalate automatically to AI_VERDICT. |
 
 ### 4. Claiming (Private Payouts)
@@ -71,7 +71,7 @@ wraith/
 │
 ├── cre/                    # Chainlink CRE TypeScript workflows
 │   ├── workflows/
-│   │   ├── market-suggester.ts     # Reddit → Claude → market suggestion
+│   │   ├── market-suggester.ts     # Reddit → OpenAI → market suggestion
 │   │   ├── bet-intake.ts           # Private bet routing via TEE
 │   │   ├── settlement.ts           # Automated resolution at deadline
 │   │   └── payout.ts               # Private claim verification + payout
@@ -133,8 +133,8 @@ Market created with:
 
 At deadline:
   CRE fetches articles from sources (Confidential HTTP)
-  Sends articles + prompt to Claude
-  Claude returns: { verdict: "NO", reason: "No formal approval found" }
+  Sends articles + prompt to OpenAI
+  OpenAI returns: { verdict: "NO", reason: "No formal approval found" }
   CRE posts NO + reasoning on-chain
   48hr dispute window → if no challenge → settled
 ```
@@ -164,7 +164,7 @@ At deadline:
 | Smart Contracts | Solidity, Foundry |
 | Automation & Oracles | Chainlink CRE (Workflows, Confidential HTTP, TEE) |
 | Price Feeds | Chainlink Data Feeds |
-| AI | Claude (Anthropic) via CRE |
+| AI | OpenAI (GPT-4o-mini) via CRE |
 | Privacy | Commitment scheme (keccak256), nullifier pattern |
 | Frontend | Next.js, wagmi, viem |
 | Target Chain | Arbitrum |
@@ -209,7 +209,7 @@ forge test
 ```bash
 cd cre
 npm install
-# configure .env with ANTHROPIC_API_KEY, CRE credentials
+# configure secrets.yaml with OPENAI_API_KEY, NEWS_API_KEY
 npm run deploy:workflows
 ```
 
