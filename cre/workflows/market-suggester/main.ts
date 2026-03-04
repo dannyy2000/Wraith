@@ -252,7 +252,14 @@ export function onHttpTrigger(runtime: Runtime<Config>, _payload: HTTPPayload): 
 
 const initWorkflow = (_config: Config) => {
   const httpCapability = new cre.capabilities.HTTPCapability();
-  const httpTrigger = httpCapability.trigger({});
+  const httpTrigger = httpCapability.trigger({
+    authorizedKeys: [
+      {
+        type: "KEY_TYPE_ECDSA_EVM",
+        publicKey: "0x02AF376f613938A58c9567128E82bf3536a76F27",
+      },
+    ],
+  });
   return [cre.handler(httpTrigger, onHttpTrigger)];
 };
 
