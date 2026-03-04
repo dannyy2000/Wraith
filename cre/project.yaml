@@ -1,0 +1,17 @@
+# ==========================================================================
+# CRE PROJECT SETTINGS FILE — Wraith
+# ==========================================================================
+
+staging-settings:
+  account:
+    workflow-owner-address: "0x02AF376f613938A58c9567128E82bf3536a76F27"
+  rpcs:
+    - chain-name: ethereum-testnet-sepolia-arbitrum-1
+      url: https://sepolia-rollup.arbitrum.io/rpc
+
+production-settings:
+  account:
+    workflow-owner-address: "0x02AF376f613938A58c9567128E82bf3536a76F27"
+  rpcs:
+    - chain-name: ethereum-testnet-sepolia-arbitrum-1
+      url: https://sepolia-rollup.arbitrum.io/rpc
