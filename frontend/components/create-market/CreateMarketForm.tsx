@@ -105,7 +105,7 @@ export function CreateMarketForm({ prefill }: CreateMarketFormProps) {
               className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-wraith-purple"
             >
               <option value="">Select a price feed...</option>
-              <option value="0x62CAe0FA2da220f43a51F86Db2EDb36DcA9A5A08">ETH / USD</option>
+              <option value="0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165">ETH / USD</option>
               <option value="0x56a43EB56Da12C0dc1D972ACb089c06a5dEF8e69">BTC / USD</option>
               <option value="0x0FB99723Aee6f420beAD13e6bBB79b7E6F034298">LINK / USD</option>
             </select>
