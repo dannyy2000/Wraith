@@ -215,7 +215,7 @@ function generateSuggestion(
 // │                   HTTP Trigger Handler                       │
 // ================================================================
 
-export function onHttpTrigger(runtime: Runtime<Config>, _payload: HTTPPayload): string {
+function onHttpTrigger(runtime: Runtime<Config>, _payload: HTTPPayload): string {
   runtime.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   runtime.log("Wraith CRE: Market Suggester");
   runtime.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");

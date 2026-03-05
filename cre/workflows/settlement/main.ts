@@ -173,7 +173,7 @@ function readMarket(runtime: Runtime<Config>, marketId: bigint) {
     .callContract(runtime, {
       call: encodeCallMsg({
         from: zeroAddress,
-        to: evmConfig.marketFactoryAddress,
+        to: evmConfig.marketFactoryAddress as `0x${string}`,
         data: callData,
       }),
     })
@@ -287,7 +287,7 @@ function settlePriceFeed(
   const decimalsCall = encodeFunctionData({ abi: PRICE_FEED_ABI, functionName: "decimals" });
   const decimalsResult = evmClient
     .callContract(runtime, {
-      call: encodeCallMsg({ from: zeroAddress, to: source, data: decimalsCall }),
+      call: encodeCallMsg({ from: zeroAddress, to: source as `0x${string}`, data: decimalsCall }),
     })
     .result();
   const decimals = Number(
@@ -298,7 +298,7 @@ function settlePriceFeed(
   const priceCall = encodeFunctionData({ abi: PRICE_FEED_ABI, functionName: "latestRoundData" });
   const priceResult = evmClient
     .callContract(runtime, {
-      call: encodeCallMsg({ from: zeroAddress, to: source, data: priceCall }),
+      call: encodeCallMsg({ from: zeroAddress, to: source as `0x${string}`, data: priceCall }),
     })
     .result();
   const [, answer] = decodeFunctionResult({
@@ -401,7 +401,7 @@ function settleAiVerdict(
 // │        Log Trigger 1: SettlementRequested                    │
 // ================================================================
 
-export function onSettlementRequested(runtime: Runtime<Config>, log: EVMLog): string {
+function onSettlementRequested(runtime: Runtime<Config>, log: EVMLog): string {
   runtime.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   runtime.log("Wraith CRE: Settlement Requested");
 
@@ -449,7 +449,7 @@ export function onSettlementRequested(runtime: Runtime<Config>, log: EVMLog): st
 // │        Log Trigger 2: DisputeEscalated                       │
 // ================================================================
 
-export function onDisputeEscalated(runtime: Runtime<Config>, log: EVMLog): string {
+function onDisputeEscalated(runtime: Runtime<Config>, log: EVMLog): string {
   runtime.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
   runtime.log("Wraith CRE: Dispute Escalated — running AI_VERDICT");
 
