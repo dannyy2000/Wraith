@@ -97,8 +97,20 @@ export function CreateMarketForm({ prefill }: CreateMarketFormProps) {
       {/* Conditional fields */}
       {resolutionType === ResolutionType.PRICE_FEED && (
         <>
-          <Field label="Chainlink Feed Address" value={source} onChange={setSource} placeholder="0x..." />
-          <Field label="Condition" value={condition} onChange={setCondition} placeholder=">= 5000" />
+          <div>
+            <label className="text-xs text-zinc-400 mb-1 block">Asset Pair</label>
+            <select
+              value={source}
+              onChange={(e) => setSource(e.target.value)}
+              className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-wraith-purple"
+            >
+              <option value="">Select a price feed...</option>
+              <option value="0x62CAe0FA2da220f43a51F86Db2EDb36DcA9A5A08">ETH / USD</option>
+              <option value="0x56a43EB56Da12C0dc1D972ACb089c06a5dEF8e69">BTC / USD</option>
+              <option value="0x0FB99723Aee6f420beAD13e6bBB79b7E6F034298">LINK / USD</option>
+            </select>
+          </div>
+          <Field label="Condition" value={condition} onChange={setCondition} placeholder=">= 2000" />
         </>
       )}
 
