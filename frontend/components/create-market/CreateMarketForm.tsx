@@ -98,7 +98,7 @@ export function CreateMarketForm({ prefill }: CreateMarketFormProps) {
       {resolutionType === ResolutionType.PRICE_FEED && (
         <>
           <div>
-            <label className="text-xs text-zinc-400 mb-1 block">Asset Pair</label>
+            <label className="text-xs text-zinc-400 mb-1 block">Asset</label>
             <select
               value={source}
               onChange={(e) => setSource(e.target.value)}
