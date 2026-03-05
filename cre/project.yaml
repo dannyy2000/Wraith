@@ -8,6 +8,8 @@ staging-settings:
   rpcs:
     - chain-name: ethereum-testnet-sepolia-arbitrum-1
       url: https://sepolia-rollup.arbitrum.io/rpc
+    - chain-name: ethereum-mainnet
+      url: https://ethereum-rpc.publicnode.com
 
 production-settings:
   account:
@@ -15,3 +17,5 @@ production-settings:
   rpcs:
     - chain-name: ethereum-testnet-sepolia-arbitrum-1
       url: https://sepolia-rollup.arbitrum.io/rpc
+    - chain-name: ethereum-mainnet
+      url: https://ethereum-rpc.publicnode.com
