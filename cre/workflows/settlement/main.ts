@@ -7,12 +7,12 @@
 //     → Execute resolution by type:
 //         PRICE_FEED  — Read Chainlink price feed, compare condition
 //         API_POLL    — HTTP call to API endpoint, read field, compare condition
-//         AI_VERDICT  — Fetch news + ask Claude, return YES/NO + reasoning
+//         AI_VERDICT  — Fetch news + ask OpenAI, return YES/NO + reasoning
 //     → Write 0x01 report to MarketFactory.onReport()
 //
 //   Trigger 2: DisputeEscalated(uint256 indexed marketId)
 //     → Read market question from chain
-//     → Run AI_VERDICT (Claude)
+//     → Run AI_VERDICT (OpenAI)
 //     → Write 0x02 report (settleDispute route)
 
 import {

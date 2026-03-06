@@ -3,7 +3,7 @@
 // HTTP-triggered workflow.
 // Flow:
 //   1. Fetch trending posts from r/CryptoCurrency
-//   2. Send to Claude — generate a prediction market question + resolution config
+//   2. Send to OpenAI — generate a prediction market question + resolution config
 //   3. Return the suggestion as JSON — nothing is written to chain
 //
 // The frontend receives the suggestion, displays it to the creator for review.
@@ -95,7 +95,7 @@ FIELD RULES:
 - endpoint: API_POLL only — full path with query params
 - field: API_POLL only — dot-notation JSON path (e.g. "ethereum.usd")
 - condition: PRICE_FEED/API_POLL only — comparison operator + value (e.g. ">= 5000")
-- resolutionPrompt: AI_VERDICT only — exact prompt Claude will receive at settlement
+- resolutionPrompt: AI_VERDICT only — exact prompt OpenAI will receive at settlement
 - redditSource: the post title that inspired this question
 
 QUALITY RULES:
@@ -144,7 +144,7 @@ function fetchRedditTrends(runtime: Runtime<Config>): RedditPost[] {
 }
 
 // ================================================================
-// │                      Claude Caller                           │
+// │                      OpenAI Caller                           │
 // ================================================================
 
 function generateSuggestion(

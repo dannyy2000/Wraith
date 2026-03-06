@@ -71,17 +71,33 @@ wraith/
 │
 ├── cre/                    # Chainlink CRE TypeScript workflows
 │   ├── workflows/
-│   │   ├── market-suggester.ts     # Reddit → OpenAI → market suggestion
-│   │   ├── bet-intake.ts           # Private bet routing via TEE
-│   │   ├── settlement.ts           # Automated resolution at deadline
-│   │   └── payout.ts               # Private claim verification + payout
-│   └── package.json
+│   │   ├── market-suggester/
+│   │   │   └── main.ts             # HTTP trigger: Reddit → OpenAI → market suggestion
+│   │   └── settlement/
+│   │       ├── main.ts             # Log trigger: reads SettlementRequested, resolves market
+│   │       └── openai.ts           # AI verdict helper — NewsAPI → OpenAI → YES/NO
+│   └── project.yaml
 │
 └── frontend/               # Next.js UI
     ├── app/
     ├── components/
     └── lib/
 ```
+
+---
+
+## Chainlink Integration
+
+All files that use Chainlink services:
+
+| File | Chainlink Service |
+|---|---|
+| [`cre/workflows/market-suggester/main.ts`](cre/workflows/market-suggester/main.ts) | CRE HTTP Trigger, Confidential HTTP (Reddit scrape + OpenAI), secrets vault |
+| [`cre/workflows/settlement/main.ts`](cre/workflows/settlement/main.ts) | CRE Log Trigger (`SettlementRequested`), Data Feeds (PRICE_FEED), Confidential HTTP (API_POLL + AI_VERDICT), `encodeCall` + `evmWrite` to settle on-chain |
+| [`cre/workflows/settlement/openai.ts`](cre/workflows/settlement/openai.ts) | CRE secrets (`NEWS_API_KEY`, `OPENAI_API_KEY`), Confidential HTTP to NewsAPI and OpenAI |
+| [`contracts/src/WraithKeeper.sol`](contracts/src/WraithKeeper.sol) | Chainlink Automation (`AutomationCompatibleInterface`) — `checkUpkeep` / `performUpkeep` |
+| [`contracts/src/MarketFactory.sol`](contracts/src/MarketFactory.sol) | `onReport` entry point for CRE workflow to post settlement result on-chain |
+| [`cre/project.yaml`](cre/project.yaml) | CRE workflow config — targets, RPC endpoints, workflow registration |
 
 ---
 
