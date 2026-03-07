@@ -211,6 +211,15 @@ Disputes need resolution. AI_VERDICT with a predetermined prompt is more consist
 - Node.js 18+
 - A Chainlink CRE account
 
+### Deployed Contracts (Arbitrum Sepolia)
+
+| Contract | Address |
+|---|---|
+| MarketFactory | `0x35067ef1c48207f633030bcb2c682f84e8918ec2` |
+| PrivacyPool | `0x50d2bd2eebe5754b1b5362dec8a5ffd51445f3d7` |
+| ClaimRegistry | `0x81f972ef7a8d5f5f043573a42ccca590dc8e203a` |
+| WraithKeeper | `0x7d95cd74da9c4c8f48349c8b4b624e9e7adf7585` |
+
 ### Contracts
 
 ```bash
